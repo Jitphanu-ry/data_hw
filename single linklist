@@ -1,0 +1,237 @@
+public class SinglyLinkedList {
+        Node head;
+        String listName;
+
+        public SinglyLinkedList(String name){
+            //ตั้งชื่อ list
+            listName = name;
+        }
+
+        public void popBack() {
+            if (isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+            }else{
+                Node current = head;
+                //ถ้ามี node ตัวเดียวลบ head
+                if(current.next == null){
+                    head = null;
+                }else{
+                    //ถ้ามีหลาย node ถ้ามี node ถัดไป 2 node ให้เลื่อนไปเรื่อยๆ
+                    while(current.next.next != null){
+                        current = current.next;
+                    }
+                    //ลบ node สุดท้าย
+                    current.next = null;
+                }
+            }
+        }
+
+        public void popFront(){
+            if (isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+            }else{
+                //ให้ head ชี้ข้ามไปตัวถัดไป
+                head = head.next;
+            }
+        }
+
+        public Node topFront(){
+            if (isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+                return new Node("Empty List!");
+            } else {
+                //return head node
+                return head;
+            }
+        }
+
+        public Node topBack(){ 
+            if (isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+                return new Node("Empty List!");
+            } else {
+                Node current = head;
+                //ถ้ายังมีตัวสุดท้ายชี้ตัวถัดไปเรื่อยๆ
+                while(current.next != null){
+                    current = current.next;
+                }
+                //return last node
+                return current;
+            }
+        }
+
+        public void pushFront(Node node){
+            if (isEmpty()){
+                //ถ้า list ว่างให้ head = node เลย
+                head = node;
+            }else{
+                //ให้ node ชี้ไปที่ head แล้วค่อยให้ head ชี้กลับ
+                node.next = head;
+                head = node;
+            }
+        }
+
+        public void pushBack(Node node) {
+            if (isEmpty()){
+                //ถ้า list ว่างให้ head = node เลย
+                head = node;
+            } else {
+                //เลื่อน current ไปตัวสุดท้าย
+                Node current = head;
+                while(current.next != null){
+                    current = current.next;
+                }    
+                //ให้ current ชี้ไปที่ node
+                current.next = node;
+            }
+        }
+
+        public Node findNode(int id){
+            if (isEmpty()){
+                //ต้องมี list
+                return new Node("Empty List!");
+            } else {
+                Node current = head;
+                //check ทุก node จนกว่าจบการทำงานหรือไม่มี node
+                while(current != null){
+                    //check ถ้า current id = id ให้จบการทำงานแล้ว return node นั้น
+                    if(current.student_id == id){
+                        return current; 
+                    }
+                    current = current.next;
+                }
+                //not found
+                return new Node("Student Not Found!");
+            }
+        }
+
+        public Node eraseNode(int id){
+            if (isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+                return new Node("Empty List!");
+            } else {
+                Node current = head;
+                //ถ้าเจอตัวแรกลบตัวแรกโดยให้ head ชี้ไปตัวถัดไป
+                if(current.student_id == id){
+                    //ระบุค่า delete เพื่อ return deleted node
+                    Node delete = current;
+                    head = current.next;
+                    return delete;
+                }
+                //loop จนกว่าไม่มี node ถัดไปหรือจบการทำงาน
+                while(current.next != null){
+                    //ถ้า node ถัดไปเจอ id แล้วให้ current ชี้ข้าม current.next ไป node ถัดไปอีกแล้วจบการทำงาน
+                    if(current.next.student_id == id){
+                        //ระบุค่า delete เพื่อ return deleted no
+                        Node delete = current.next;
+                        current.next = current.next.next;
+                        return delete;
+                    }                
+                    current = current.next;
+                }
+                //not found
+                return new Node("Student Not Found!");
+
+            }
+        }
+
+        public void addNodeAfter(Node node1, Node node2){
+            if(isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+            }else{
+                Node current = head;
+                //check node ไปจนกว่าไม่เจอหรือจบการทำงาน
+                while(current != null){
+                    //ถ้าเจอ node แล้ว ให้ node2 ชี้ไปตัวถัดไปแลเวค่อยให้ current ชี้ node2
+                    if(current == node1){
+                        node2.next = current.next;
+                        current.next = node2;
+                        return;
+                    }
+                    current = current.next;
+                }
+            }
+        }
+
+        public void addNodeBefore(Node node1, Node node2){
+            if(isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+            }else{
+                //ถ้าเจอตัวแรกให้แทรกหน้าตัาแรกเหมือน pushfront
+                if(head == node1){
+                    node2.next = head;
+                    head = node2;
+                    return;
+                }
+                Node current = head;
+                //check node ถัดไปจนกว่าไม่เจอหรือจบการทำงาน
+                while(current.next != null){
+                    //ถ้าตัวถัดไปเป็น node1 ให้ node2 ชี้ตัวถัดไป แล้ว current ชี้ไปที่ node2
+                    if(current.next == node1){
+                        node2.next = current.next;
+                        current.next = node2;
+                        return;
+                    }
+                    current = current.next;
+                }
+            }
+        }
+
+        public boolean isEmpty(){
+            //ถ้าไม่มี head คือ list ว่าง
+            return head == null;
+        }
+        public void merge(SinglyLinkedList list){
+            if(isEmpty()){
+                //ต้องมี node
+                System.out.println("ERROR");
+            }else{
+                Node current = head;
+                //ขยับ current ให้ไปที่ node สุดท้าย
+                while(current.next != null){
+                    current = current.next;
+                }
+                //ให้ node ตัวสุดท้ายชี้ไปที่ head ของอีก list
+                current.next = list.head;
+            }
+        }
+
+        public void printStructure(){
+            //print list name
+            System.out.print(listName + ": head ->");
+            //print node head to tail
+            Node current = head;
+            while(current != null){
+                System.out.print(" {" + current.student_id + "} ->");
+                current = current.next;
+            }    
+            System.out.println(" null");
+        }
+
+        public Node whoGotHighestGPA(){
+            if (isEmpty()) {
+                //ต้องมี list
+                return new Node("Empty List!");
+            } else {
+                //ระบุ max,current
+                Node current = head;
+                Node max = head;
+                //check ทุก node เทียบกับ max
+                while(current != null){
+                    //ถ้ามี node ไหน ที่ gpa มากกว่า max ให้ max เท่ากับ node นั้น
+                    if(current.gpa >= max.gpa){
+                        max = current;
+                    }
+                    current = current.next;
+                }
+                return max;
+            }
+        }
+    }
