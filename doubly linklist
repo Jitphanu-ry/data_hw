@@ -1,0 +1,248 @@
+public class DoublyLinkedList {
+    Node head;
+    Node tail;
+    String listName;
+    
+    public DoublyLinkedList(String name){
+        //ระบุชื่อ list
+        listName = name;
+    }
+    
+    public void popBack() {
+      if (isEmpty()){
+        //ต้องมี node
+        System.out.println("ERROR");
+        }else{
+          //ถ้ามี node เดียวลบทั้งหัวและหาง
+          if(head == tail){
+              head = null;
+              tail = null;
+              return;
+          }
+          //หางชี้ไปตัวก่อนหน้าแล้วลบตัวเดิมทิ้ง
+          tail = tail.previous;
+          tail.next = null;
+        }
+    }
+    
+    public void popFront(){
+        if (isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+        }else{
+            //ให้หัวชี้ไปตัวถัดไป
+            head = head.next;
+        }
+    }
+    
+    public Node topFront(){
+        if (isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+            return new Node("Empty List!");
+        } else {
+            //return ค่า head (ตัวแรก)
+            return head;
+        }
+    }
+    
+    public Node topBack(){
+        if (isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+            return new Node("Empty List!");
+        } else {
+            //return ค่า tail (ตัวท้าย)
+            return tail;
+        }
+    }
+    
+    public void pushFront(Node node){
+        if (isEmpty()){
+            //ถ้าไม่มี node สร้าง node ที่มีหัวและหาง
+            head = node;
+            tail = node;
+        }else{
+            node.next = head;//node ชี้ไปที่หัว
+            head.previous = node;//ให้หัวชี้กลับมาที่ node
+            head = node;//ให้หัวย้ายมาที่ node
+        }
+    }
+    
+    public void pushBack(Node node) {
+        if (isEmpty()) {
+            //ถ้าไม่มี node สร้าง node ที่มีหัวและหาง
+            head = node;
+            tail = node;
+        } else {
+            tail.next = node;//หางชี้ไปข้างหน้าที่ node
+            node.previous = tail;//node ชี้กลับหลังมาที่หาง
+            tail = node;//ให้หางย้ายมาที่ node
+        }
+    }
+
+    public Node findNode(int id){
+        if (isEmpty()){
+            //ต้องมี node
+            return new Node("Empty List!");
+        }else{
+            Node current = head;
+            //check ทุก node จนกว่าจบการทำงานหรือไม่มี node
+            while(current != null){
+                //check ถ้า current id = id ให้จบการทำงานแล้ว return node นั้น
+                if(current.student_id == id){
+                    return current; 
+                }
+                    current = current.next;
+            }
+            //not found
+            return new Node("Student Not Found!");
+        }
+    }
+    
+    public Node eraseNode(int id){
+        if (isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+            return new Node("Empty List!");
+        } else {
+            Node current = head;
+            //ถ้าเจอตัวแรกลบตัวแรกโดยให้ head ชี้ไปตัวถัดไป
+            if(current.student_id == id){
+                //ระบุค่า delete เพื่อ return deleted node
+                Node delete = current;
+                head = current.next;
+                return delete;
+            }
+            //loop จนกว่าไม่มี node ถัดไปหรือจบการทำงาน
+            while(current.next != null){
+                //ถ้า node ถัดไปเจอ id แล้วให้ current ชี้ข้าม current.next ไป node ถัดไปอีกแล้วจบการทำงาน
+                if(current.next.student_id == id){
+                    //ระบุค่า delete เพื่อ return deleted node
+                    Node delete = current.next;
+                    current.next = current.next.next;
+                    return delete;
+                }                
+                current = current.next;
+            }
+            //not found
+            return new Node("Student Not Found!");
+        }
+    }
+    
+    public void addNodeAfter(Node node1, Node node2){
+        if(isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+        }else{
+            Node current = head;
+            //ไป node ถัดไป
+            while(current != null){
+                //ถ้าเจอให้แทรกหลัง current
+                if(current == node1){
+                    node2.next = current.next; //node2 ชี้ไป node ถัดไป
+                    node2.previous = current; // node2 ชี้กลับมา node ที่ต้องการเพิ่มด้านหลัง
+                    
+                    //ถ้า node1 เป็นตัวสุดให้ node2 เป็นหาง
+                    if(current.next == null){
+                        tail = node2;
+                    }else{
+                        //แทรก node2
+                        current.next.previous = node2;//node ถัดจาก current ชี้กลับมาที่ node2
+                    }
+                    //ให้ตัวถัดจาก current เป็น node2
+                    current.next = node2;
+                    return;
+                }
+                current = current.next;
+            }
+        }
+    }
+    
+    public void addNodeBefore(Node node1, Node node2){
+        if(isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+        }else{
+            Node current = tail;
+            //ไป node ก่อนหน้า
+            while(current != null){
+                //ถ้าเจอให้แทรกก่อน current
+                if(node1 == current){
+                    node2.previous = current.previous;//node2 ชี้ไป node ก่อนหน้า
+                    node2.next = current;//node2 ชี้ไปที่ข้างหน้า node ที่ต้องกว่าเพิ่มด้านหน้า
+                    
+                    //ถ้า node1 เป็นตัวแรกให้ node2 เป็นหัว
+                    if(current.previous == null){
+                        head = node2;
+                    }else{
+                        //แทรก node2
+                        current.previous.next = node2;//node ก่อนหน้าจาก current ชี้ไปที่ node2
+                    }
+                    //ให้ตัวก่อน current เป็น node2
+                    current.previous = node2;
+                    return;
+                }
+                current = current.previous;
+            }
+        }
+    }
+    
+    public boolean isEmpty(){
+        //ไม่มีหัวและหาง
+        return head == null && tail == null;
+    }
+    
+    public void merge(DoublyLinkedList list){
+        if(isEmpty()){
+            //ต้องมี node
+            System.out.println("ERROR");
+        }else{
+            tail.next = list.head;//ให้หางของ list แรกชี้ไปที่หัวของ list ถัดไป
+            list.head.previous = tail;//ให้หัวของ list ถัดไปชี้มาที่หางเพื่อต่อ previous
+            tail = list.tail;//ให้หางเป็นหางของ list ตัวที่นำมาต่อ
+        }
+    }
+    
+    //print head to tail
+    public void printStructure(){
+        Node current=head;
+        System.out.print(listName + ": head <-> ");
+        while(current!=null){
+            System.out.print("{" + current.student_id + "} <-> ");
+            current = current.next;
+        }
+        System.out.println("tail");
+    }
+    
+    // This may be useful for you for implementing printStructure()
+    public void printStructureBackward(){ 
+        Node current=tail;
+        System.out.print(listName + ": tail <-> ");
+        while(current!=null){
+            System.out.print("{" + current.student_id + "} <-> ");
+            current = current.previous;
+        }
+        System.out.println("head");
+    }
+    
+    public Node whoGotHighestGPA(){
+        if (isEmpty()) {
+            //ต้องมี node
+            return new Node("Empty List!");
+        } else {
+            //ระบุ max,current
+            Node current = head;
+            Node max = head;
+            //check ทุก node เทียบกับ max
+                while(current != null){
+                //ถ้ามี node ไหน ที่ gpa มากกว่า max ให้ max เท่ากับ node นั้น
+                if(current.gpa >= max.gpa){
+                    max = current;
+                }
+                current = current.next;
+            }
+            return max;
+        }
+    }
+}
