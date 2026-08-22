@@ -1,0 +1,100 @@
+public class DynamicArray {
+    private int[] arr;
+    private int capacity;
+    private int size; // Last element can be indexed at size-1
+    
+    public DynamicArray(int cap){ // Class Constructor
+        arr = new int[cap];
+        capacity = cap;
+    }
+    
+    public void PushBack(int data){
+        // START FIX CODE HERE
+        if(size < capacity){
+            arr[size] = data;
+            size++;
+        }else{
+            capacity = capacity*2;
+            int[] temp = new int[capacity];
+            for(int i=0;i<size;i++){
+                temp[i] = arr[i];
+            }
+            arr = temp;
+            arr[size] = data;
+            size++;
+        }
+        // END CODE HERE
+    }
+    public int PopBack(){
+        // START FIX CODE HERE
+        if(size == 0){
+            System.out.println("ERROR");
+            return 0;
+        }else{
+            int data = arr[size-1];
+            arr[size-1] = 0;
+            size--;
+            return data;
+        }
+        // END CODE HERE
+    }
+
+    public int Get(int i){
+        // START FIX CODE HERE
+        if(0<=i && i<size){
+            return arr[i];
+        }else{
+            System.out.println("ERROR");
+            return 0;
+        }
+        // END CODE HERE
+    }
+    public void Set(int i, int value){
+        // START FIX CODE HERE
+        if(0 <=i && i<size){
+            arr[i] = value;
+        }else{
+            System.out.println("ERROR");
+        }
+        // END CODE HERE
+    }
+    
+    public void Remove(int i){
+        // START FIX CODE HERE
+        if(0 <= i &&i<size){
+            for(int j=i;j<size-1;j++){
+                arr[j] = arr[j+1];
+            }
+            size--;
+        }else{
+            System.out.println("ERROR");
+        }
+        // END CODE HERE
+    }
+    
+    public boolean IsEmpty(){
+        // START FIX CODE HERE
+        return size == 0;
+        // END CODE HERE
+    }
+    
+    public int GetSize(){
+        // START FIX CODE HERE
+        return size;
+        // END CODE HERE
+    }
+    
+    public void PrintStructure(){
+        // START FIX CODE HERE
+        System.out.print("Size = " + size + ", Cap = " + capacity + ", arr = [ ");
+        for(int i=0;i<size;i++){
+            if(i != size-1){
+                System.out.print(arr[i]+", ");
+            }else{
+                System.out.print(arr[i]+" ");
+            }
+        }
+        System.out.println("]");
+        // END CODE HERE
+    }
+}
