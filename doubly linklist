@@ -31,7 +31,13 @@ public class DoublyLinkedList {
             System.out.println("ERROR");
         }else{
             //ให้หัวชี้ไปตัวถัดไป
-            head = head.next;
+            if(head == tail){
+                //มีตัวเดียว
+                head = null;
+                tail = null;
+            }else{
+                head = head.next;
+            }
         }
     }
     
