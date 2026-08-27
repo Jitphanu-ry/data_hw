@@ -1,0 +1,37 @@
+public static Node constructTree1(){
+    //สร้าง root Node แล้วให้มีค่า 3
+    Node root = new Node(3); // Fix this
+    // do something
+    //สร้าง node นำมาใส่ใน root node ซ้ายหรือขวาแล้วค่อยๆลงไปทางขวาหรือซ้ายทีละขั้นอย่างต่อเนื่อง
+    //สร้าง node ใหม่แล้วนำไปใส่ฝั่งขวาของ root node
+    root.right = new Node(5);
+    root.right.right = new Node(9);
+    root.right.right.left = new Node(4);
+    //สร้าง node ใหม่แล้วนำไปใส่ฝั่งซ้ายของ root node
+    root.left = new Node(7);
+    root.left.left = new Node(2);
+    root.left.right = new Node(6);
+    root.left.right.right = new Node(8);
+    root.left.right.left = new Node(1);
+    
+    return root;
+}
+
+public static Node constructTree2(){
+    //สร้าง root Node แล้วให้มีค่า 1
+    Node root = new Node(1); // Fix this
+    // do something
+    //สร้าง node นำมาใส่ใน root node ซ้ายหรือขวาแล้วค่อยๆลงไปทางขวาหรือซ้ายทีละขั้นอย่างต่อเนื่อง
+    //สร้าง node ใหม่แล้วนำไปใส่ฝั่งขวาของ root node
+    root.right = new Node(3);
+    root.right.right = new Node(6);
+    root.right.right.left = new Node(9);
+    //สร้าง node ใหม่แล้วนำไปใส่ฝั่งซ้ายของ root node
+    root.left = new Node(2);
+    root.left.left = new Node(4);
+    root.left.right = new Node(5);
+    root.left.right.left = new Node(7);
+    root.left.right.right = new Node(8);
+    root.left.right.right.right = new Node(10);
+    return root;
+}
