@@ -1,0 +1,18 @@
+public class Node extends BTreePrinter { // ให้ node สืบสมบัติจาก BTreePrinter โดยใช้คำสั่ง extends
+
+    Node left;
+    Node right;
+    int data;
+
+    public Node(int data) {
+        // fix this
+        //สร้าง node แล้วข้อมูลมาใส่ใน node
+        this.data = data;
+    }
+
+    public void printTree() {
+        // Understand this line before uncommenting
+        super.printTree(this); //ใช้คำสั่ง super เรียกใช้ printTree ของ node แม่ที่สืบสมบัติมา
+    }
+
+}
