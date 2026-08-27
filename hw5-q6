@@ -1,0 +1,67 @@
+public class Node extends BTreePrinter { // ให้ node สืบสมบัติจาก BTreePrinter โดยใช้คำสั่ง extends
+
+    Node left;
+    Node right;
+    int data;
+
+    public Node(int data) {
+        // Add something
+        this.data = data;//สร้าง node แล้วข้อมูลมาใส่ใน node
+    }
+
+    public void printTree() {
+        super.printTree(this);
+    }
+
+    public void printBFT() {
+        Queue q = new Queue(50);
+        System.out.print("BFT node sequence [ ");
+        // Do something
+        //เช็คว่ามี root node ไหม
+        if(this == null){
+            return;
+        }else{
+            q.enqueue(this);//นำ root node ใส่ใน queue
+            //นำ node เข้ามาจากซ้ายไปขวาแล้วลงไปด้านล่างทีละชั้น
+            while(!q.isEmpty()){
+                Node node = q.dequeue();//นำ node ออกจาก queue
+                System.out.print(node.data + " ");//print node ทีออกจาก queue
+                //เช็ค node ที่ออกมาจาก queue มีลูกไหม
+                if(node.left != null){
+                    q.enqueue(node.left);//ถ้ามี node ขวานำมาใส่ใน queue ก่อน
+                }
+                if(node.right != null){
+                    q.enqueue(node.right);//ถ้ามี node ซ้ายนำมาใส่ใน queue
+                }
+            }
+        }
+        
+        System.out.println("]");
+    }
+
+    public void printDFT() { // PreOrder
+        Stack s = new Stack(50);
+        System.out.print("DFT node sequence [ ");
+        // Do something
+        //เช็คว่ามี root node ไหม
+        if(this == null){
+            return;
+        }else{
+            s.push(this);//นำ root node ใส่ใน stack
+            //นำ node ขวาเข้ามาก่อนซ้ายแล้ว pop ซ้ายที่เข้ามาล่าสุดออกแล้วค่อยลงซ้ายลึกไปเรื่อยๆจนหมดจากนั้นค่อยๆออกมาเช็ค node ขวา
+            while(!s.isEmpty()){
+                Node node = s.pop();//นำ node ออกจาก stack
+                System.out.print(node.data + " ");//print node ที่ออกมาจาก stack
+                //เช็ค node ที่ออกมาจาก stack มีลูกไหม
+                if(node.right != null){
+                    s.push(node.right);//ถ้ามี node ซ้ายนำมาใส่ใน stack ก่อน
+                }
+                if(node.left != null){
+                    s.push(node.left);//ถ้ามี node ขวานำมาใส่ stack
+                }
+            }
+        }
+        
+        System.out.println("]");
+    }
+}
