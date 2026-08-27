@@ -190,7 +190,7 @@ public class DoublyLinkedList {
                     return;
                 }
                 current = current.previous;
-            }
+            }https://github.com/Jitphanu-ry/data_hw/blob/main/doubly%20linklist
         }
     }
     
@@ -200,14 +200,18 @@ public class DoublyLinkedList {
     }
     
     public void merge(DoublyLinkedList list){
-        if(isEmpty()){
-            //ต้องมี node
+        if (list.isEmpty()){
             System.out.println("ERROR");
-        }else{
-            tail.next = list.head;//ให้หางของ list แรกชี้ไปที่หัวของ list ถัดไป
-            list.head.previous = tail;//ให้หัวของ list ถัดไปชี้มาที่หางเพื่อต่อ previous
-            tail = list.tail;//ให้หางเป็นหางของ list ตัวที่นำมาต่อ
+            return;
         }
+        if (isEmpty()){
+            head = list.head;
+            tail = list.tail;
+            return;
+        }
+        tail.next = list.head;//ให้หางของ list แรกชี้ไปที่หัวของ list ถัดไป
+        list.head.previous = tail;//ให้หัวของ list ถัดไปชี้มาที่หางเพื่อต่อ previous
+        tail = list.tail;//ให้หางเป็นหางของ list ตัวที่นำมาต่อ
     }
     
     //print head to tail
