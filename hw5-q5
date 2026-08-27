@@ -1,0 +1,64 @@
+public class Queue {
+    Node[] arr; // circular array
+    int capacity;
+    int front;
+    int back;
+    int size;
+    
+    public Queue(int cap){
+        capacity = cap;//จำกัด node ใน queue
+        arr = new Node[cap];//สร้าง array
+    }
+    
+    public void enqueue(Node node){
+        if (!isFull()){
+            // do something
+            arr[back] = node;//เพิ่ม node ที่ตำแหน่งสุดท้าย
+            back = (back+1)%capacity;//ให้ตำแหน่งของ back วนกลับไป 0 ได้โดยการหารเศษของ cap กับตำแหน่ง back ที่เพิ่ม
+            size++;//เพิ่มขนาด array
+        }else{
+            System.out.println("Queue Overflow!!!");
+        }
+    }
+    
+    public Node dequeue(){
+        
+        if (!isEmpty()){
+            // do something
+            Node delete = arr[front];//สร้าง node ไว้เก็บค่า node ที่จะลบ
+            arr[front] = null;//ลบ node ที่ตำแหน่งหน้าสุด
+            front = (front+1)%capacity;//ให้ตำแหน่งของ front วนกลับไป 0 ได้โดยการหารเศษของ cap กับตำแหน่ง front เพิ่มมาหลังลบตัวหน้าไป
+            size--;//ลดขนาด array
+            return delete;//คืนค่า node ที่ลบไป
+        }else{
+            System.out.println("Queue Underflow!!!");
+        }
+        return null; // fix this (out of place)
+    }
+    
+    public boolean isEmpty(){
+        return size == 0; //ไม่มีตัวใน array
+    }
+    
+    public boolean isFull(){
+        return size == capacity; //เต็มถ้า size เท่ากับ cap
+    }
+    
+    public void printCircularIndices(){
+        System.out.println("Front index = " + front + " Back index = " + back);
+    }
+    
+    public void printQueue(){
+        if (!isEmpty()){
+            System.out.print("[Front] ");
+            // do something here
+            //print ทุกตัวที่เหลือใน array ตั้งแต่ตำแหน่งที่ front ไปถึง back
+            for(int i=front;i<size;i++){
+                System.out.print(arr[i].data+" ");
+            }
+            System.out.println("[Back]");
+        }else{
+            System.out.println("Empty Queue!!!");
+        }
+    }
+}
