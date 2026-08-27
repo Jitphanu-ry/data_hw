@@ -1,0 +1,52 @@
+public class Stack {
+    Node[] arr; // regular array
+    int capacity;
+    int size;
+
+    public Stack(int cap){
+        capacity = cap;//จำกัด node ใน stack
+        arr = new Node[cap];//สร้าง array
+    }
+    
+    public void push(Node node){
+        if (!isFull()){
+            // do something
+            arr[size] = node;//เพิ่ม node ใส่ใน array
+            size++;//เพิ่มขนาด array
+        }else{
+            System.out.println("Stack Overflow!!!");
+        }
+    }
+    public Node pop(){
+        if (!isEmpty()){
+            // do something
+            Node delete = arr[size-1];//สร้าง node ใหม่ให้มีค่าเท่ากับ node ที่จะลบ
+            arr[size-1] = null;//ลบตัวเข้ามา stack ตัวท้าย
+            size--;//ลดขนาด array
+            return delete;//คืนค่า node ที่ลบ
+        }else{
+            System.out.println("Stack Underflow!!!");
+        }
+        return null; // fix this (out of place)
+    }
+    public boolean isFull(){
+        return size == capacity; //เต็มถ้า size เท่ากับ cap
+    }
+    public boolean isEmpty(){
+        return size == 0; //ไม่มีตัวใน array
+    }
+    
+    public void printStack(){
+        if (!isEmpty()) {
+            System.out.print("[Bottom] ");
+            // do something here
+            //print ทุกตัวใน stack ตัวแรกไปตัวท้าย
+            for(int i=0;i<size;i++){
+                System.out.print(arr[i].data+" ");
+            }
+            System.out.println("[Top]");
+        } else {
+            System.out.println("Empty Stack!!!");
+        }
+    }
+}
