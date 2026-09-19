@@ -1,0 +1,122 @@
+public class Tree extends BTreePrinter{ // ให้ node สืบสมบัติจาก BTreePrinter
+  Node root;
+    
+  public Tree(Node root){
+      // fix this
+      this.root = root;//กำหนดค่า root
+  }
+  
+  public void printTree(){
+      // Pls use codes from the previous problem
+      if(root != null){
+        super.printTree(root);//ถ้ามี root nodeprint node ใน tree ทั้งหมด
+      }else{
+        System.out.println("Empty tree!!!");
+      }
+  }
+
+  public static void printNode(Node node){
+      // Pls use codes from the previous problem
+      if(node != null){
+        System.out.println(node.key);//ถ้ามี node นั้นทำการ print
+      }else{
+        System.out.println("Node not found!!!");
+      }
+  }
+  
+  public Node findKey(int search_key){
+      // Pls use codes from the previous problem
+      if(root == null){
+          return null;//ไม่ root node ไม่เรียกฟังชั่น
+      }else{
+          return findKey(root,search_key); // Call the recursive version
+      }
+  }
+  
+  public static Node findKey(Node node, int search_key){
+      // Pls use codes from the previous problem
+      if(node == null){
+            return null;//หา search key ไม่เจอ
+        }
+        if(search_key == node.key){
+          return node;//ถ้าเจอ search_key แล้วให้ return node นั้น
+        }else{
+            if(search_key < node.key){
+                return findKey(node.left,search_key);//ถ้า search key น้อยกว่า node ที่ชี้อยู่ให้ลงไปดู node ซ้าย
+            }else{
+                return findKey(node.right,search_key);//ถ้ามากกว่าให้ลงไปดู node ขวา
+            }
+        }
+  }
+
+  public static int height(Node node){
+      // Use recursion to implement this function
+      // height = length(path{node->deepest child})
+      if(node == null){
+          return -1;//ลง null ให้ return -1
+      }else{
+          return 1 + Math.max(height(node.left), height(node.right));//ถ้าไม่ใช้ null node หา max ของ node ซ้ายขวา แล้วเพิ่มขึ้นทีละ 1 ตามความสูง
+      }
+  }
+  
+  public static int size(Node node){
+      // Use recursion to implement this function
+      // size = #children + 1(itself)
+      if(node == null){
+          return 0;//เป็น null ให้ return 0
+      }else{
+          return 1 + size(node.left) + size(node.right);//ถ้าไม่ใช่ null node หาขนาดของ node ซ้ายขวาแล้วเพิ่ม 1
+      }
+  }
+  
+  public static int depth(Node root, Node node){
+      // Use recursion to implement this function
+      // Similar to height() but start from node, go up to root
+      // depth = length(path{node->root})
+      if(root == null||node == null){
+        return -1;//ถ้าเจอ null ให้ return -1
+      }
+      if(root == node){
+        return 0;//ถ้าเจอ node ที่ต้องการหาความลึกให้ return 0
+      }
+      //ถ้าเจอ node แล้วจะ return ค่าเพิ่มขึ้นตามความลึกที่ลงไป
+      if(node.key < root.key){
+          return 1 + depth(root.left,node);//node มีค่าน้อยกว่า root ลงไปทางซ้าย
+      }else{
+          return 1 + depth(root.right,node);//node มีค่ามากกว่า root ลงไปทางขวา
+      }
+  }
+  
+  public int treeHeight(){ // Tree height
+      // Hint: call the static function
+      return height(root);//ความสูงของ root node
+  }
+  
+  public int treeSize(){ // Tree size
+      // Hint: call the static function
+      return size(root);//ขนาดของ root node
+  }
+  
+  public int treeDepth(){ // Tree depth
+      // Hint: call the static function
+      return height(root);//ความลึกของ tree เท่ากับความสูงของ tree
+  }
+  
+  public Node findKthSmallest(int k){
+      return findKthSmallest(root,k); // Call the recursive version
+  }
+  
+  public static Node findKthSmallest(Node node, int k){
+      // this function should be recursive
+      int l = size(node.left);//l คือขนาดของ sub tree ด้านซ้าย
+      if(k > l+1){//เมื่อ k มากกว่า l+1
+          return findKthSmallest(node.right,k-l-1);//ลงไป node ขวาแล้วหาลำดับที่ k-l-1 ดับจาก node นั้น
+      }else if(k < l+1){//เมื่อ k น้อยกว่า l+1
+          return findKthSmallest(node.left,k);//ลงไป node ซ้ายแล้วหาลำดับ k เดิมที่ node นั้น
+      }else{//ถ้า k = l+1
+          return node;//return node นั้น
+      }
+  }
+  
+  public Tree(){} // Dummy constructor (No need to edit)
+}
