@@ -1,0 +1,88 @@
+public class Tree extends BTreePrinter{ // ให้ node สืบสมบัติจาก BTreePrinter
+    Node root;
+      
+    public Tree(Node root){
+        // fix this
+        this.root = root;//กำหนดค่า root
+    }
+    
+    public void printTree(){
+        // Pls use codes from the previous problem
+        if(root != null){
+        super.printTree(root);//ถ้ามี root nodeprint node ใน tree ทั้งหมด
+        }else{
+          System.out.println("Empty tree!!!");
+        }
+    }
+
+    public Node findClosest(int search_key){
+        // Pls use codes from the previous problem
+        Node current, closest;//สร้าง node current กับ closest ไว้เก็บตัวแปร node
+        closest = current = root;
+        int min_diff = Integer.MAX_VALUE;//กำหนดค่าผลต่างน้อยสุดให้มีค่ามากไว้ก่อน
+      
+        // Use while loop to traverse from root to the closest leaf
+        while(current != null){//loop จนกว่า current เป็น null
+          int diff = Math.abs(search_key - current.key);//ให้ค่า diff เป็นผลต่างของ search key กับค่า current node
+          if(diff < min_diff){//ถ้าผลต่างน้อยสุด น้อยกว่าค่าผลต่าง
+            min_diff = diff;//กำหนดค่า diff เป็นผลต่างน้อยสุด
+            closest = current;//closest node เป็น current node ที่ดูกว่า
+          }
+          
+          if(search_key < current.key){//ถ้า search key มีค่าน้อยกว่า current
+              current = current.left;//ลงไปด้านกว่า
+          }else{
+              current = current.right;//มากกว่าลงไปด้านซ้าย
+          }
+        }
+      
+        return closest;//return ผลลัพธ์เป็น closest node
+    }
+    
+    public static Node findNext(Node node){
+        //this function should call other functions
+        if(node.right == null){//ถ้าไม่มี node ด้านขวาแล้ว
+            return rightAncestor(node);//หา parent มีค่ามากกว่าด้าน(ซ้ายตัวแรก)
+        }else{
+            return leftDescendant(node.right);//หา min ของ subtree ด้านขวา
+        }
+    }
+    
+    public static Node leftDescendant(Node node){// Case 1 (findMin)
+        // this function should be recursive
+        if(node.left == null){
+            return node;//ถ้าด้านซ้ายไม่มี node แล้วให้ return node นั้น
+        }else{
+            return leftDescendant(node.left);//ถ้ายังมี node ด้านซ้ายอยู่ให้ลงไปด้านซ้ายต่อเรื่อยๆ
+        }
+    }
+    
+    public static Node rightAncestor(Node node) {// Case 1 (first right parent)
+        // this function should be recursive
+        if(node.parent == null){
+            return null;//ถ้าไม่มี parent ให้หยุดการทำงาน
+        }
+        if(node.key < node.parent.key){//ถ้า parent มีค่ามากกว่า(เจอ parent ด้านขวาตัวแรก)
+            return node.parent;//return node parent นั้น
+        }else{
+            return rightAncestor(node.parent);//ถ้าไม่เจอไต่ parent ขึ้นไป
+        }
+    }
+    
+    public List rangeSearch(int x, int y){
+        // This function utilizes findCloest() and findNext()
+        // Use list.append(node) to add node to the list
+        List L = new List(100);//สร้าง list
+        Node N = findClosest(x);//หา node ที่มีค่าใกล้กับ min ของ range ที่ต้องการหามากสุด
+        while(N != null && N.key <= y){//วนลูปไปจนการถึงตัวสุดท้าย และค่าที่สูงสุดต้องไม่เจอ node ที่มีค่ามากสุดของ tree
+            if(N.key >= x){
+                L.append(N);//ถ้า node มีค่ามากกว่า min ใส่ค่าลง list
+            }
+            N = findNext(N);//ไป node ถัดไป
+        }
+        return L;//return list
+    }
+    
+    
+    public Tree(){} // Dummy constructor (No need to edit)
+}
