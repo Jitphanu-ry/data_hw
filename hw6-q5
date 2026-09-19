@@ -1,0 +1,122 @@
+public class Tree extends BTreePrinter{ // ให้ node สืบสมบัติจาก BTreePrinter
+  Node root;
+  
+  public Tree(Node root){
+      this.root = root;
+  }
+  
+  public Tree(){} // Dummy constructor (No need to edit)
+
+  
+  public void printTree(){
+      // Pls use codes from the previous problem
+      if(root != null){
+        super.printTree(root);//ถ้ามี root nodeprint node ใน tree ทั้งหมด
+      }else{
+        System.out.println("Empty tree!!!");
+      }
+  }
+
+  public Node findKey(int search_key){
+      // Pls use codes from the previous problem
+      if(root == null){
+          return null;//ไม่ root node ไม่เรียกฟังชั่น
+      }else{
+          return findKey(root,search_key); // Call the recursive version
+      }
+  }
+  
+  public static Node findKey(Node node, int search_key){
+      // Pls use codes from the previous problem
+      if(node == null){
+            return null;//หา search key ไม่เจอ
+        }
+        if(search_key == node.key){
+          return node;//ถ้าเจอ search_key แล้วให้ return node นั้น
+        }else{
+            if(search_key < node.key){
+                return findKey(node.left,search_key);//ถ้า search key น้อยกว่า node ที่ชี้อยู่ให้ลงไปดู node ซ้าย
+            }else{
+                return findKey(node.right,search_key);//ถ้ามากกว่าให้ลงไปดู node ขวา
+            }
+        }
+  }
+
+  public static Node findMin(Node node){
+      // Pls use codes from the previous problem
+      if(node == null){
+        return null;//ไม่มี root node
+      }
+      if(node.left != null){
+        return  findMin(node.left);//ถ้ามี node ซ้ายอยู่ให้ชี้ลงไปตัวซ้ายเรื่อยๆจนถึงตัวสุดท้าย
+      }else{
+        return node;//return ค่าตัวซ้ายสุด
+        }
+  }
+  
+  
+  // This function is for deleting the root node
+  // If the node is not the root, please call the recursive version
+  public void deleteKey(int key) {
+      // There should be 6 cases here
+      // Non-root nodes should be forwarded to the static function
+      if(root == null){
+          System.out.println("Empty Tree!!!");//ไม่มี root เป็น empty tree
+          return;
+      }
+      if(root.key == key){//ถ้าตัวที่ต้องการลบเป็น node
+          if(root.right == null && root.left == null){//กรณีไม่มีลูก
+              root = null;//ลบ root node
+          }else if(root.left == null){//กรณีมีลูกด้านซ้ายตัวเดียว
+              root = root.right;//เปลี่ยนให้ลูกด้านซ้ายเป็น root node
+          }else if(root.right == null){//กรณีมีลูกด้านขวาตัวเดียว
+              root = root.left;//เปลี่ยนให้ลูกด้านขวาเป็น root node
+          }else{//กรณีมีครบ 2 ตัว
+              Node minRST = findMin(root.right);//หา min ของ subtree ด้านขวา
+              root.key = minRST.key;//เปลี่ยนค่า root node เป็นค่าของ min right subtree
+              deleteKey(minRST);//ใช้ static funtion ลบ node minRST
+          }
+      }else{//ถ้าไม่ใช่ node
+          Node target = findKey(key);//หา node ใน tree
+          if(target == null){
+              System.out.println("Key not found!!!");//กรณีไม่เจอตัวที่ต้องการลบ
+          }else{
+              deleteKey(target);//ใช้ static funtion ลบ node นั้น
+          }
+      }
+  }
+  
+  // Use this function to delete non-root nodes
+  public static void deleteKey(Node node){
+      // There should be 7 cases here
+      Node parent = node.parent;//กำหนด node parent ของ node ที่ต้องการลบ
+      if(node.right == null && node.left == null){//กรณี node ต้องลบไม่มีลูก
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = null;//ลบ node นั้นจากลบ node ซ้าย parent
+          }else{
+              parent.right = null;//ลบ node นั้นจากลบ node ขวา parent
+          }
+      }else if(node.left == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านซ้าย
+          Node child = node.right;//node ลูกด้านซ้าย
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else if(node.right == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านขวา
+          Node child = node.left;//node ลูกด้านขวา
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else{
+          Node minRST = findMin(node.right);//หา min ของ subtree ด้านขวา
+          node.key = minRST.key;//เปลี่ยนค่า node ที่ต้องการลบเป็นค่าของ min right subtree
+          deleteKey(minRST);//ใช้ static funtion ลบ node minRST
+      }
+  }
+  
+}
