@@ -1,0 +1,129 @@
+public class Tree extends BTreePrinter{ // ให้ node สืบสมบัติจาก BTreePrinter
+  Node root;
+    
+  public Tree(Node root){
+      // fix this
+      this.root = root;//กำหนดค่า root
+  }
+  
+  public void printTree(){
+      // Pls use codes from the previous problem
+      if(root != null){
+        super.printTree(root);//ถ้ามี root nodeprint node ใน tree ทั้งหมด
+      }else{
+        System.out.println("Empty tree!!!");
+      }
+  }
+
+  public static void printNode(Node node){
+      // Pls use codes from the previous problem
+      if(node != null){
+        System.out.println(node.key);//ถ้ามี node นั้นทำการ print
+      }else{
+        System.out.println("Node not found!!!");
+      }
+  }
+  
+
+  public static Node findClosestLeaf(Node node, int search_key){
+      // Pls use codes from the previous problem
+      if(search_key < node.key){//ถ้า search key น้อยกว่า current ดู node ซ้าย
+            if(node.left != null){
+                return findClosestLeaf(node.left,search_key);//ถ้า node ด้านซ้ายให้ลงไปดู node ด้านซ้าย
+            }else{
+            return node;//ถ้าไม่มี node ด้านซ้ายแล้วแสดงว่า node นั้นเป็น closest Leaf
+            }
+        }else{//ถ้าเกิดมากกว่าให้ดูขวา
+            if(node.right != null){
+              return findClosestLeaf(node.right,search_key);//ถ้า node ด้านขวาให้ลงไปดู node ด้านขวา
+            }else{
+              return node;//ถ้าไม่มี node ด้านขวาแล้วแสดงว่า node นั้นเป็น closest 
+            }
+        }
+  }
+
+  public void insertKey(int key) {
+      // Implement insertKey() using the non-recursive version
+      // This function should call findClosestLeaf()
+      if(root == null){
+          root = new Node(key);//ถ้าไม่มี root node เพิ่ม node เลย
+          return;
+      }
+      Node closest = findClosestLeaf(root,key);//หา closestleaf
+      if(closest.key == key){
+        System.out.println("Duplicated key!!!");//ถ้าเป็นตัวซ้ำให้จบการทำงาน
+        return;
+        }else{
+          if(key < closest.key){
+              closest.left = new Node(key);//ค่าใหม่น้อยกว่าให้สร้าง node กว่าด้านซ้าย
+          }else{
+              closest.right = new Node(key);//ค่าใหม่มากกว่าให้สร้าง node กว่าด้านขวา
+          }
+        }
+  }
+  
+  public void printPreOrderDFT(){
+      System.out.print("PreOrder DFT node sequence [ ");
+      if(root == null){
+          return;//ถ้าไม่มี root node print ไม่ได้
+      }else{
+          printPreOrderDFT(root);// Call the recursive version
+      }
+      System.out.println("]");
+  }
+  
+  public static void printPreOrderDFT(Node node){
+      // this function should be recursive
+      System.out.print(node.key + " ");//print node ก่อนไป node ถัดไป
+      if(node.left != null){
+          printPreOrderDFT(node.left);//ลงไปซ้ายสุดจนถึงตัวท้ายก่อน
+      }
+      if(node.right != null){
+          printPreOrderDFT(node.right);//ค่อยๆออกมาตัวขวา
+      }
+  }
+  
+  public void printInOrderDFT(){
+      System.out.print("InOrder DFT node sequence [ ");
+      if(root == null){
+          return;//ถ้าไม่มี root node print ไม่ได้
+      }else{
+          printInOrderDFT(root);// Call the recursive version
+      }
+      System.out.println("]");
+  }
+  
+  public static void printInOrderDFT(Node node){
+      // this function should be recursive
+      if(node.left != null){
+          printInOrderDFT(node.left);//ลงไปซ้ายสุดจนถึงตัวท้าย
+      }
+      System.out.print(node.key + " ");//ถ้าตัวซ้ายเป็น null ให้ printออกแล้วก็ print node นี้แล้วไปขวา(print แบบเรียงเลข)
+      if(node.right != null){
+          printInOrderDFT(node.right);//ค่อยๆไล่ตัวขวาออกมา
+      }
+  }
+  
+  public void printPostOrderDFT(){
+      System.out.print("PostOrder DFT node sequence [ ");
+      if(root == null){
+          return;//ถ้าไม่มี root node print ไม่ได้
+      }else{
+          printPostOrderDFT(root);// Call the recursive version
+      }
+      System.out.println("]");
+  }
+  
+  public static void printPostOrderDFT(Node node){
+      // this function should be recursive
+      if(node.left != null){
+          printPostOrderDFT(node.left);//ไปตัวซ้ายสุด
+      }
+      if(node.right != null){
+          printPostOrderDFT(node.right);//ออกไปตัวขวาสุด
+      }
+      System.out.print(node.key + " ");//print node ที่อยู่ลึกสุดทั้งซ้ายและขวาก่อนแล้วค่อยๆออกไป root node
+  }
+  
+  public Tree(){} // Dummy constructor (No need to edit)
+}
