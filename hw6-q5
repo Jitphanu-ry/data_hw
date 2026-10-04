@@ -69,8 +69,10 @@ public class Tree extends BTreePrinter{ // ให้ node สืบสมบั�
               root = null;//ลบ root node
           }else if(root.left == null){//กรณีมีลูกด้านซ้ายตัวเดียว
               root = root.right;//เปลี่ยนให้ลูกด้านซ้ายเป็น root node
+              root.parent = null;
           }else if(root.right == null){//กรณีมีลูกด้านขวาตัวเดียว
               root = root.left;//เปลี่ยนให้ลูกด้านขวาเป็น root node
+              root.parent = null;
           }else{//กรณีมีครบ 2 ตัว
               Node minRST = findMin(root.right);//หา min ของ subtree ด้านขวา
               root.key = minRST.key;//เปลี่ยนค่า root node เป็นค่าของ min right subtree
