@@ -1,0 +1,371 @@
+public class AVLTree extends BTreePrinter{
+    Node root;
+
+    public AVLTree(Node root){
+        this.root = root;
+    }
+    
+    public void singleRotateFromLeft(Node y) {
+        // Pls copy the code from the previous problem
+      if(y == null || y.left == null){
+          return;//ถ้าไม่เจอ node ที่ต้องการหมุนหรือไม่มี node ให้หมุน return ออก
+      }
+      Node x = y.left;//ให้ x เป็น node ซ้ายก่อนหมุน
+      Node w = y.parent;//ให้ w เป็น parent node
+      if(x.right != null){//ถ้ามีวงใน
+        y.left = x.right;//ให้ลูกด้านขวา x เป็นลูกด้านซ้าย y
+        y.left.parent = y;//ผูก parent ให้ลูก y
+      }else{//ถ้าไม่มีวงใน
+        y.left = null;//ให้ลบเส้นด้านซ้ายของ y
+      }
+      x.right = y;//ให้ y เป็นลูกด้านขวา x
+      y.parent = x;//ผูก parent ให้ลูก x
+      if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+          root = x;//เปลี่ยน root node เป็น node x
+          x.parent = null;//ลบ parent ของ root node
+      }else if(x.key < w.key){//ถ้า x เดิมอยู่ซ้าย w
+          w.left = x;//เปลี่ยนลูกด้านซ้าย w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }else{//ถ้า x เดิมอยู่ขวา w
+          w.right = x;//เปลี่ยนลูกด้านขวา w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }
+    }
+
+    public void singleRotateFromRight(Node y) {
+        // Pls copy the code from the previous problem
+      if(y == null || y.right == null){
+          return;//ถ้าไม่เจอ node ที่ต้องการหมุนหรือไม่มี node ให้หมุน return ออก
+      }
+      Node x = y.right;//ให้ x เป็น node ซ้ายก่อนหมุน
+      Node w = y.parent;//ให้ w เป็น parent node
+      if(x.left != null){//ถ้ามีวงใน
+          y.right = x.left;//ให้ลูกด้านซ้าย x เป็นลูกด้านขวา y
+          y.right.parent = y;//ผูก parent ให้ลูก y
+      }else{//ถ้าไม่มีวงใน
+          y.right = null;//ให้ลบเส้นด้านขวาของ y
+      }
+      x.left = y;//ให้ y เป็นลูกด้านซ้าย x
+      y.parent = x;//ผูก parent ให้ลูก x
+      if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+          root = x;//เปลี่ยน root node เป็น node x
+          x.parent = null;//ลบ parent ของ root node
+      }else if(x.key < w.key){//ถ้า x เดิมอยู่ซ้าย w
+          w.left = x;//เปลี่ยนลูกด้านซ้าย w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }else{//ถ้า x เดิมอยู่ขวา w
+          w.right = x;//เปลี่ยนลูกด้านขวา w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }
+    }
+
+    public void doubleRotateFromLeft(Node y) {
+        // Pls copy the code from the previous problem
+        if (y == null || y.left == null || y.left.right == null) {
+            return;//ถ้าไม่มี node y,x,z ให้ return ออก
+        }
+        Node x = y.left;//ให้ node x เป็นลูกด้านซ้าย y
+        Node z = y.left.right;//ให้ node z เป็นลูกขวา x
+        Node w = y.parent;//ให้ node w เป็น parent y
+        if(z.left != null){//ถ้า node z มีลูกด้านซ้าย
+            x.right = z.left;//ให้ลูกด้านซ้าย z เป็นลูกด้านขวา x
+            x.right.parent = x;//ผูก parent ให้ลูก x
+        }else{//ถ้า node z ไม่มีลูกด้านซ้าย
+            x.right = null;//ลบเส้นขวา x
+        }
+        if(z.right != null){//ถ้า node z มีลูกด้านขวา
+            y.left = z.right;//ให้ลูกด้านขวา z เป็นลูกด้านซ้าย y
+            y.left.parent = y;//ผูก parent ให้ลูก y
+        }else{//ถ้า node z ไม่มีลูกด้านขวา
+            y.left = null;//ลบเส้นซ้าย y
+        }
+        z.right = y;//ให้ลูกขวา z เป็น node y
+        y.parent = z;//ผูก parent ให้ลูก z
+        z.left = x;//ให้ลูกซ้าย z เป็น node x
+        x.parent = z;//ผูก parent ให้ลูก z
+        if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+            root = z;//เปลี่ยน root node เป็น node z
+            z.parent = null;//ลบ parent ของ root node
+        }else if(z.key < w.key){//ถ้า z เดิมอยู่ซ้าย w
+            w.left = z;//เปลี่ยนลูกด้านซ้าย w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }else{//ถ้า x เดิมอยู่ขวา w
+            w.right = z;//เปลี่ยนลูกด้านขวา w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }
+    }
+
+    public void doubleRotateFromRight(Node y) {
+        // Pls copy the code from the previous problem
+        if (y == null || y.right == null || y.right.left == null) {
+            return;//ถ้าไม่มี node y,x,z ให้ return ออก
+        }
+        Node x = y.right;//ให้ node x เป็นลูกด้านขวา y
+        Node z = y.right.left;//ให้ node z เป็นลูกซ้าย x
+        Node w = y.parent;//ให้ node w เป็น parent y
+        if(z.right != null){//ถ้า node z มีลูกด้านขวา
+            x.left = z.right;//ให้ลูกด้านขวา z เป็นลูกด้านซ้าย x
+            x.left.parent = x;//ผูก parent ให้ลูก x
+        }else{//ถ้า node z ไม่มีลูกด้านขวา
+            x.left = null;//ลบเส้นซ้าย x
+        }
+        if(z.left != null){//ถ้า node z มีลูกด้านซ้าย
+            y.right = z.left;//ให้ลูกด้านซ้าย z เป็นลูกด้านขวา y
+            y.right.parent = y;//ผูก parent ให้ลูก y
+        }else{//ถ้า node z ไม่มีลูกด้านซ้าย
+            y.right = null;//ลบเส้นขวา y
+        }
+        z.left = y;//ให้ลูกซ้าย z เป็น node y
+        y.parent = z;//ผูก parent ให้ลูก z
+        z.right = x;//ให้ลูกขวา z เป็น node x
+        x.parent = z;//ผูก parent ให้ลูก z
+        if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+            root = z;//เปลี่ยน root node เป็น node z
+            z.parent = null;//ลบ parent ของ root node
+        }else if(z.key < w.key){//ถ้า z เดิมอยู่ซ้าย w
+            w.left = z;//เปลี่ยนลูกด้านซ้าย w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }else{//ถ้า x เดิมอยู่ขวา w
+            w.right = z;//เปลี่ยนลูกด้านขวา w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }
+    }
+    
+    public static void rebalance(AVLTree tree, Node node){
+        // Pls copy the code from the previous problem
+        int balanceFactor = height(node.left) - height(node.right);//ความสูงซ้าย - ขวา
+        if (balanceFactor > 1 || balanceFactor < -1){//ถ้าความสูงต่างกันเกิน 1 ไม่ balance
+            if (balanceFactor > 1){//ถ้ามากกว่า 1 หนักขวา
+                if (height(node.left.left) > height(node.left.right)){//ถ้า node granchild ไหนมีความสูงมากกว่าแสดงว่า node พังที่ node นั้น
+                    System.out.println("Perform SingleRotationFromLeft(Node " + node.key +")");   // Fix ??? and call a function
+                    tree.singleRotateFromLeft(node);//outer case LL
+                }else{
+                    System.out.println("Perform DoubleRotationFromLeft(Node " + node.key +")");   // Fix ??? and call a function
+                    tree.doubleRotateFromLeft(node);//inner case LR
+                }
+            }else{//ถ้าน้อยกว่า -1 หนักซ้าย
+                if (height(node.right.right) > height(node.right.left)){//ถ้า node granchild ไหนมีความสูงมากกว่าแสดงว่า node พังที่ node นั้น
+                    System.out.println("Perform SingleRotationFromRight(Node " + node.key +")");   // Fix this and call a function
+                    tree.singleRotateFromRight(node);//outer case RR
+                }else{
+                    System.out.println("Perform DoubleRotationFromRight(Node " + node.key +")");   // Fix this and call a function
+                    tree.doubleRotateFromRight(node);//inner case RL
+                }
+            }
+        }
+    }
+    
+    
+    public static Node findKey(Node node, int search_key) {
+        // Pls copy the code from the previous problem
+        if(node == null){
+            return null;//หา search key ไม่เจอ
+        }
+        if(search_key == node.key){
+          return node;//ถ้าเจอ search_key แล้วให้ return node นั้น
+        }else{
+            if(search_key < node.key){
+                return findKey(node.left,search_key);//ถ้า search key น้อยกว่า node ที่ชี้อยู่ให้ลงไปดู node ซ้าย
+            }else{
+                return findKey(node.right,search_key);//ถ้ามากกว่าให้ลงไปดู node ขวา
+            }
+        }  
+    }
+
+    public static Node findMin(Node node){
+        // Pls copy the code from the previous problem
+        if(node == null){
+            return null;//ไม่มี root node
+        }
+        if(node.left != null){
+            return  findMin(node.left);//ถ้ามี node ซ้ายอยู่ให้ชี้ลงไปตัวซ้ายเรื่อยๆจนถึงตัวสุดท้าย
+        }else{
+            return node;//return ค่าตัวซ้ายสุด
+        }
+    }
+
+    public static Node findMax(Node node){
+        // Pls copy the code from the previous problem
+        if(node == null){
+            return null;//ไม่มี root node
+        }
+        if(node.right != null){
+            return findMax(node.right);//ถ้ามี node ขวาอยู่ให้ชี้ลงไปตัวขวาเรื่อยๆจนถึงตัวสุดท้าย
+        }else{
+            return node;//return ค่าตัวขวาสุด
+        }
+    }
+
+    public void insertKey(int key) {
+        // Pls copy the code from the previous problem
+        if (root == null) {
+            root = new Node(key);
+        } else {
+            insertKey(this, root, key);
+        }
+    }
+
+    public static void insertKey(AVLTree tree, Node node, int key) {
+        // Pls copy the code from the previous problem (with the rebalancing feature)
+        if (key == node.key) {
+            System.out.println("Duplicated key:" + key);
+        }else if (key < node.key) {//Go left
+            if (node.left == null) {//ถ้าไม่มี node
+                node.left = new Node(key);//เพิ่ม node
+                node.left.parent = node;//ผูก parent
+            }else {
+                insertKey(tree, node.left, key);//ลงไป node ขวา
+            }
+        }else{  // Go right
+            if (node.right == null) {//ถ้าไม่มี node
+                node.right = new Node(key);//เพิ่ม node
+                node.right.parent = node;//ผูก parent
+            }else {
+                insertKey(tree, node.right, key);//ลงไป node ซ้าย
+            }
+        }
+        rebalance(tree,node);//rebalance ตอนออกจาก stack
+    }
+    
+    public void deleteKey(int key) {
+        // Pls copy the code from the previous problem
+      if(root == null){
+          System.out.println("Empty Tree!!!");//ไม่มี root เป็น empty tree
+          return;
+      }
+      if(root.key == key){//ถ้าตัวที่ต้องการลบเป็น node
+          if(root.right == null && root.left == null){//กรณีไม่มีลูก
+              root = null;//ลบ root node
+          }else if(root.left == null){//กรณีมีลูกด้านซ้ายตัวเดียว
+              root = root.right;//เปลี่ยนให้ลูกด้านซ้ายเป็น root node
+              root.parent = null;
+              rebalance(this,root);//rebalance root node
+          }else if(root.right == null){//กรณีมีลูกด้านขวาตัวเดียว
+              root = root.left;//เปลี่ยนให้ลูกด้านขวาเป็น root node
+              root.parent = null;
+              rebalance(this,root);//rebalance root node
+          }else{//กรณีมีครบ 2 ตัว
+              Node minRST = findMin(root.right);//หา min ของ subtree ด้านขวา
+              root.key = minRST.key;//เปลี่ยนค่า root node เป็นค่าของ min right subtree
+              deleteKey(this,minRST);//ใช้ static funtion ลบ node minRST
+          }
+      }else{//ถ้าไม่ใช่ node
+          Node target = findKey(root,key);//หา node ใน tree
+          if(target == null){
+              System.out.println("Key not found!!!");//กรณีไม่เจอตัวที่ต้องการลบ
+          }else{
+              deleteKey(this,target);//ใช้ static funtion ลบ node นั้น
+          }
+      }
+    }
+    
+    public static void deleteKey(AVLTree tree, Node node){
+        // Pls copy the code from the previous problem (with the rebalacing feature)
+      Node parent = node.parent;//กำหนด node parent ของ node ที่ต้องการลบ
+      if(node.right == null && node.left == null){//กรณี node ต้องลบไม่มีลูก
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = null;//ลบ node นั้นจากลบ node ซ้าย parent
+          }else{
+              parent.right = null;//ลบ node นั้นจากลบ node ขวา parent
+          }
+      }else if(node.left == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านซ้าย
+          Node child = node.right;//node ลูกด้านซ้าย
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else if(node.right == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านขวา
+          Node child = node.left;//node ลูกด้านขวา
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else{
+          Node minRST = findMin(node.right);//หา min ของ subtree ด้านขวา
+          node.key = minRST.key;//เปลี่ยนค่า node ที่ต้องการลบเป็นค่าของ min right subtree
+          deleteKey(tree,minRST);//ใช้ static funtion ลบ node minRST
+      }
+      while(parent != null){//วนจนกว่าถึง root
+          rebalance(tree,parent);//rebalance parent ทุกตัว
+          parent = parent.parent;//ไต่ parent ขึ้นไป
+      }
+    }
+    
+    public static boolean isMergeable(Node r1, Node r2){
+        if(r1 == null || r2 == null){
+            return true;//ถ้า merge กับ null node ได้
+        }
+        return findMax(r1).key < findMin(r2).key;//ถ้า max r1 น้อยกว่า min r2 แสดงว่าทุก node ใน r1 น้อยกว่า r2
+    }
+
+    public static Node mergeWithRoot(Node r1, Node r2, Node t){
+        if (isMergeable(r1, r2)) {
+            int balance = height(r1)-height(r2);//หา balance จากความสูง subtree ขวา - subtree ซ้าย
+            if(balance <= 1 && balance >= -1){//check blance
+                t.left = r1;//ให้ลูกด้านซ้ายเป็น root node ของ r1
+                t.right = r2;//ให้ลูกด้านขวาเป็น root node ของ r2
+                if(r1 != null){//มี r1
+                    r1.parent = t;//ผูก parent
+                }
+                if(r2 != null){//มี r2
+                    r2.parent = t;//ผูก parent
+                }
+                return t;//return root node ใหม่
+            }else if(height(r1) > height(r2)){//ถ้า tree r1 สูงกว่า tree r2
+                Node r0 = mergeWithRoot(r1.right,r2,t);//ลงไป r1.right ไป merge ก่อนจนกว่าจะ merge ได้ tree ที่ balance แล้วเก็บผลลัพธ์ไว้ที่ r0
+                r1.right = r0;//นำ r0 มาแทนด้านขวาของ r1
+                if(r0 != null){//มี r0
+                    r0.parent = r2;//ผูก parent
+                }
+                AVLTree tree = new AVLTree(r1);//สร้าง AVLTree ใหม่
+                rebalance(tree,r1);//rebalnce r1
+                return tree.root;//return ค่า root ปัจจุบัน
+            }else{//ถ้า tree r2 สูงกว่า tree r1
+                Node r0 = mergeWithRoot(r1,r2.left,t);//ลงไป r2.left ไป merge ก่อนจนกว่าจะ merge ได้ tree ที่ balance แล้วเก็บผลลัพธ์ไว้ที่ r0
+                r2.left = r0;//นำ r0 มาแทนด้านซ้ายของ r2
+                if(r0 != null){//มี r0
+                    r0.parent = r2;//ผูก parent
+                }
+                AVLTree tree = new AVLTree(r2);//สร้าง AVLTree ใหม่
+                rebalance(tree,r2);//rebalnce r1
+                return tree.root;//return ค่า root ปัจจุบัน
+            }
+        } else {
+            System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+            return null;
+        }
+    }
+    
+    public void merge(AVLTree tree2){
+        if (isMergeable(this.root, tree2.root)){
+            Node t = findMax(this.root);//ให้ t เป็น max node ของ r1
+            deleteKey(t.key);//ลบ max r1 ทิ้ง
+            this.root = mergeWithRoot(this.root, tree2.root, t);//แล้วสร้าง root ใหม่ที่มี root = t แล้วด้านซ้ายเป็น root เก่าของ r1 ขวาเป็น root ของ r2
+        }else{
+            System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+        }
+    }
+
+    // This function is complete, no need to edit
+    public static int height(Node node){
+        if (node == null)
+            return -1;
+        else
+            return 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    // This function is complete, no need to edit
+    public void printTree() {
+        if (root == null) {
+            System.out.println("Empty tree!!!");
+        } else {
+            super.printTree(root);
+        }
+    }
+    
+    public AVLTree() {} // Dummy Constructor, no need to edit
+}
