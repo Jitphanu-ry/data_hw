@@ -1,0 +1,77 @@
+public class BSTree extends BTreePrinter{
+  Node root;
+    
+  public void singleRotateFromLeft(Node y) {
+      // Do something
+      if(y == null || y.left == null){
+          return;//ถ้าไม่เจอ node ที่ต้องการหมุนหรือไม่มี node ให้หมุน return ออก
+      }
+      Node x = y.left;//ให้ x เป็น node ซ้ายก่อนหมุน
+      Node w = y.parent;//ให้ w เป็น parent node
+      if(x.right != null){//ถ้ามีวงใน
+        y.left = x.right;//ให้ลูกด้านขวา x เป็นลูกด้านซ้าย y
+        y.left.parent = y;//ผูก parent ให้ลูก y
+      }else{//ถ้าไม่มีวงใน
+        y.left = null;//ให้ลบเส้นด้านซ้ายของ y
+      }
+      x.right = y;//ให้ y เป็นลูกด้านขวา x
+      y.parent = x;//ผูก parent ให้ลูก x
+      if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+          root = x;//เปลี่ยน root node เป็น node x
+          x.parent = null;//ลบ parent ของ root node
+      }else if(x.key < w.key){//ถ้า x เดิมอยู่ซ้าย w
+          w.left = x;//เปลี่ยนลูกด้านซ้าย w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }else{//ถ้า x เดิมอยู่ขวา w
+          w.right = x;//เปลี่ยนลูกด้านขวา w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }
+  }
+
+  public void singleRotateFromRight(Node y) {
+      // Do something
+      if(y == null || y.right == null){
+          return;//ถ้าไม่เจอ node ที่ต้องการหมุนหรือไม่มี node ให้หมุน return ออก
+      }
+      Node x = y.right;//ให้ x เป็น node ซ้ายก่อนหมุน
+      Node w = y.parent;//ให้ w เป็น parent node
+      if(x.left != null){//ถ้ามีวงใน
+          y.right = x.left;//ให้ลูกด้านซ้าย x เป็นลูกด้านขวา y
+          y.right.parent = y;//ผูก parent ให้ลูก y
+      }else{//ถ้าไม่มีวงใน
+          y.right = null;//ให้ลบเส้นด้านขวาของ y
+      }
+      x.left = y;//ให้ y เป็นลูกด้านซ้าย x
+      y.parent = x;//ผูก parent ให้ลูก x
+      if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+          root = x;//เปลี่ยน root node เป็น node x
+          x.parent = null;//ลบ parent ของ root node
+      }else if(x.key < w.key){//ถ้า x เดิมอยู่ซ้าย w
+          w.left = x;//เปลี่ยนลูกด้านซ้าย w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }else{//ถ้า x เดิมอยู่ขวา w
+          w.right = x;//เปลี่ยนลูกด้านขวา w ใหม่
+          x.parent = w;//ผูก parent ให้ลูก w
+      }
+  }
+  
+  public void insertKey(int key) {
+      if (root == null) {
+          root = new Node(key);
+      } else {
+          Main.insertKey(root, key);
+      }
+  }
+  
+  public void printTree() {
+      if (root == null) {
+          System.out.println("Empty tree!!!");
+      } else {
+          super.printTree(root);
+      }
+  }
+
+  public Node findKey(int search_key) {
+      return Main.findKey(root, search_key);
+  }
+}
