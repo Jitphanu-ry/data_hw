@@ -1,0 +1,95 @@
+public class BSTree extends BTreePrinter{
+    Node root;
+      
+    public void doubleRotateFromLeft(Node y) {
+        // Do something
+        if (y == null || y.left == null || y.left.right == null) {
+            return;//ถ้าไม่มี node y,x,z ให้ return ออก
+        }
+        Node x = y.left;//ให้ node x เป็นลูกด้านซ้าย y
+        Node z = y.left.right;//ให้ node z เป็นลูกขวา x
+        Node w = y.parent;//ให้ node w เป็น parent y
+        if(z.left != null){//ถ้า node z มีลูกด้านซ้าย
+            x.right = z.left;//ให้ลูกด้านซ้าย z เป็นลูกด้านขวา x
+            x.right.parent = x;//ผูก parent ให้ลูก x
+        }else{//ถ้า node z ไม่มีลูกด้านซ้าย
+            x.right = null;//ลบเส้นขวา x
+        }
+        if(z.right != null){//ถ้า node z มีลูกด้านขวา
+            y.left = z.right;//ให้ลูกด้านขวา z เป็นลูกด้านซ้าย y
+            y.left.parent = y;//ผูก parent ให้ลูก y
+        }else{//ถ้า node z ไม่มีลูกด้านขวา
+            y.left = null;//ลบเส้นซ้าย y
+        }
+        z.right = y;//ให้ลูกขวา z เป็น node y
+        y.parent = z;//ผูก parent ให้ลูก z
+        z.left = x;//ให้ลูกซ้าย z เป็น node x
+        x.parent = z;//ผูก parent ให้ลูก z
+        if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+            root = z;//เปลี่ยน root node เป็น node z
+            z.parent = null;//ลบ parent ของ root node
+        }else if(z.key < w.key){//ถ้า z เดิมอยู่ซ้าย w
+            w.left = z;//เปลี่ยนลูกด้านซ้าย w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }else{//ถ้า x เดิมอยู่ขวา w
+            w.right = z;//เปลี่ยนลูกด้านขวา w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }
+    }
+
+    public void doubleRotateFromRight(Node y) {
+        // // Do something
+        if (y == null || y.right == null || y.right.left == null) {
+            return;//ถ้าไม่มี node y,x,z ให้ return ออก
+        }
+        Node x = y.right;//ให้ node x เป็นลูกด้านขวา y
+        Node z = y.right.left;//ให้ node z เป็นลูกซ้าย x
+        Node w = y.parent;//ให้ node w เป็น parent y
+        if(z.right != null){//ถ้า node z มีลูกด้านขวา
+            x.left = z.right;//ให้ลูกด้านขวา z เป็นลูกด้านซ้าย x
+            x.left.parent = x;//ผูก parent ให้ลูก x
+        }else{//ถ้า node z ไม่มีลูกด้านขวา
+            x.left = null;//ลบเส้นซ้าย x
+        }
+        if(z.left != null){//ถ้า node z มีลูกด้านซ้าย
+            y.right = z.left;//ให้ลูกด้านซ้าย z เป็นลูกด้านขวา y
+            y.right.parent = y;//ผูก parent ให้ลูก y
+        }else{//ถ้า node z ไม่มีลูกด้านซ้าย
+            y.right = null;//ลบเส้นขวา y
+        }
+        z.left = y;//ให้ลูกซ้าย z เป็น node y
+        y.parent = z;//ผูก parent ให้ลูก z
+        z.right = x;//ให้ลูกขวา z เป็น node x
+        x.parent = z;//ผูก parent ให้ลูก z
+        if(w == null){//ถ้า node ที่ต้องการหมุนเป็น root node
+            root = z;//เปลี่ยน root node เป็น node z
+            z.parent = null;//ลบ parent ของ root node
+        }else if(z.key < w.key){//ถ้า z เดิมอยู่ซ้าย w
+            w.left = z;//เปลี่ยนลูกด้านซ้าย w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }else{//ถ้า x เดิมอยู่ขวา w
+            w.right = z;//เปลี่ยนลูกด้านขวา w ใหม่
+            z.parent = w;//ผูก parent ให้ลูก w
+        }
+    }
+    
+    public void insertKey(int key) {
+        if (root == null) {
+            root = new Node(key);
+        } else {
+            Main.insertKey(root, key);
+        }
+    }
+    
+    public void printTree() {
+        if (root == null) {
+            System.out.println("Empty tree!!!");
+        } else {
+            super.printTree(root);
+        }
+    }
+
+    public Node findKey(int search_key) {
+        return Main.findKey(root, search_key);
+    }
+}
