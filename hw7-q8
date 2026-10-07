@@ -1,0 +1,83 @@
+public class BSTree2 extends BTreePrinter{
+    Node root;
+    
+    // Implement this function using iterative method
+    // Do not use recursion
+    public Node findKey(int search_key){
+        if(root == null){
+            return null;//ถ้าไม่มี root return null
+        }
+        Node node = root;//สร้าง node
+        while(node != null){//ไล่ไปจน node ตก null
+            if(node.key == search_key){
+                return node;//ถ้าเจอแล้ว return node นั้น
+            }else{
+                if(node.key > search_key){//key มีค่าน้อยกว่า node ที่ดูอยู่
+                    node = node.left;//ไปดูด้านซ้ายต่อ
+                }else{//key มีค่ามากกว่า node ที่ดูอยู่
+                    node = node.right;//ไปดูด้านขวาต่อ
+                }
+            }
+        }
+        return null;//ไม่เจอ
+    }
+
+    // Implement this function using iterative method
+    // Do not use recursion
+    public Node findMin(){
+        Node min = root;//สร้าง node
+        while(min.left != null){
+            min = min.left;//ถ้าซ้ายยังมีลูกให้ลงซ้ายไปต่อ
+        }
+        return min;//node ซ้ายสุด
+    }
+
+    // Implement this function using iterative method
+    // Do not use recursion
+    public Node findMax(){
+        Node max = root;//สร้าง node
+        while(max.right != null){
+            max = max.right;//ถ้าขวายังมีลูกให้ลงซ้ายไปต่อ
+        }
+        return max;//node ขวาสุด
+    }
+    
+    // Implement this function using iterative method
+    // Do not use recursion
+    public void insertKey(int key) {
+        if(root == null){//ถ้าไม่มี root
+            root = new Node(key);//สร้าง node ใหม่ที่ root 
+            return;
+        }
+        Node node = root;//สร้าง node
+        while(node != null){//ถ้ามี node อยู่
+            if(node.key == key){
+                return;//key ซ้ำ return ออก while loop
+            }
+            if(node.key > key){//key น้อยกว่า node ที่ดูอยู่
+                if(node.left != null){//ถ้ามีลูก node ซ้าย
+                   node = node.left;//ลงไปลูกด้านซ้าย
+                }else{//ไม่มีลูกด้านซ้าย
+                   node.left = new Node(key);//สร้าง node ใหม่ด้านซ้าย node นั้น
+                   return;//return ออก while loop
+                }
+            }else{
+               if(node.right != null){//ถ้ามีลูก node ขวา
+                  node = node.right; //ลงไปลูกด้านขวา
+                }else{
+                   node.right = new Node(key);//สร้าง node ใหม่ด้านขวา node นั้น
+                   return;//return ออก while loop
+                }
+            }
+        }
+    }
+    
+    // This function is complete, no need to edit
+    public void printTree() {
+        if (root == null) {
+            System.out.println("Empty tree!!!");
+        } else {
+            super.printTree(root);
+        }
+    }
+}
