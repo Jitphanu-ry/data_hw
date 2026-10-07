@@ -1,0 +1,185 @@
+public class BSTree extends BTreePrinter{
+    Node root;
+
+    public static Node findKey(Node node, int search_key) {
+        // Pls copy the code from the previous homework
+        if(node == null){
+            return null;//หา search key ไม่เจอ
+        }
+        if(search_key == node.key){
+          return node;//ถ้าเจอ search_key แล้วให้ return node นั้น
+        }else{
+            if(search_key < node.key){
+                return findKey(node.left,search_key);//ถ้า search key น้อยกว่า node ที่ชี้อยู่ให้ลงไปดู node ซ้าย
+            }else{
+                return findKey(node.right,search_key);//ถ้ามากกว่าให้ลงไปดู node ขวา
+            }
+        }    
+    }
+
+    public static Node findMin(Node node){
+        // Pls copy the code from the previous homework
+        if(node == null){
+            return null;//ไม่มี root node
+        }
+        if(node.left != null){
+            return  findMin(node.left);//ถ้ามี node ซ้ายอยู่ให้ชี้ลงไปตัวซ้ายเรื่อยๆจนถึงตัวสุดท้าย
+        }else{
+            return node;//return ค่าตัวซ้ายสุด
+        }
+    }
+
+    public static Node findMax(Node node){
+        // Pls copy the code from the previous homework
+        if(node == null){
+            return null;//ไม่มี root node
+        }
+        if(node.right != null){
+            return findMax(node.right);//ถ้ามี node ขวาอยู่ให้ชี้ลงไปตัวขวาเรื่อยๆจนถึงตัวสุดท้าย
+        }else{
+            return node;//return ค่าตัวขวาสุด
+        }
+    }
+
+    public void insertKey(int key) {
+        // Pls implement this insertKey() using the recursive technique
+        // This is similiar to findKey() but can insert node to the null node
+        if(root == null){
+            root = new Node(key);//ถ้าไม่มี root node เพิ่ม node เลย
+            return;        
+        }else{
+            insertKey(root,key);//เรียกใช้ฟังชั่น recursive
+            return;
+        }
+    }
+
+    public static void insertKey(Node node, int key) {
+        // Pls copy the code from the previous homework
+        if(key == node.key){
+          return;//key ซ้ำไม่เพิ่มใน tree
+        }else{
+            if(key < node.key){//ถ้า key มีค่าน้อยกว่า node ให้ดูลูกด้านซ้าย
+                if(node.left != null){//ถ้ามีลูกด้านซ้ายอยู่
+                    insertKey(node.left,key);//ลงไปด้านซ้ายต่อ
+                }else{//ไม่มีลูกด้านซ้ายแล้ว
+                    node.left = new Node(key);//เพิ่ม node ที่ลูกซ้าย
+                    node.left.parent = node;//ผูก parent
+                    return;
+                }
+            }else{
+                if(node.right != null){//ถ้ามีลูกด้านขวาอยู่
+                    insertKey(node.right,key);//ลงไปด้านขวาต่อ
+                }else{//ไม่มีลูกด้านขวาแล้ว
+                    node.right = new Node(key);//เพิ่ม node ที่ลูกขวา
+                    node.right.parent = node;//ผูก parent
+                    return;
+                }
+            }
+        }   
+    }
+    
+    public void deleteKey(int key) {
+        // Pls copy the code from the previous homework
+              if(root == null){
+          System.out.println("Empty Tree!!!");//ไม่มี root เป็น empty tree
+          return;
+      }
+      if(root.key == key){//ถ้าตัวที่ต้องการลบเป็น node
+          if(root.right == null && root.left == null){//กรณีไม่มีลูก
+              root = null;//ลบ root node
+          }else if(root.left == null){//กรณีมีลูกด้านซ้ายตัวเดียว
+              root = root.right;//เปลี่ยนให้ลูกด้านซ้ายเป็น root node
+              root.parent = null;
+          }else if(root.right == null){//กรณีมีลูกด้านขวาตัวเดียว
+              root = root.left;//เปลี่ยนให้ลูกด้านขวาเป็น root node
+              root.parent = null;
+          }else{//กรณีมีครบ 2 ตัว
+              Node minRST = findMin(root.right);//หา min ของ subtree ด้านขวา
+              root.key = minRST.key;//เปลี่ยนค่า root node เป็นค่าของ min right subtree
+              deleteKey(minRST);//ใช้ static funtion ลบ node minRST
+          }
+      }else{//ถ้าไม่ใช่ node
+          Node target = findKey(root,key);//หา node ใน tree
+          if(target == null){
+              System.out.println("Key not found!!!");//กรณีไม่เจอตัวที่ต้องการลบ
+          }else{
+              deleteKey(target);//ใช้ static funtion ลบ node นั้น
+          }
+      }
+    }
+    
+    public static void deleteKey(Node node){
+        // Pls copy the code from the previous homework
+      Node parent = node.parent;//กำหนด node parent ของ node ที่ต้องการลบ
+      if(node.right == null && node.left == null){//กรณี node ต้องลบไม่มีลูก
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = null;//ลบ node นั้นจากลบ node ซ้าย parent
+          }else{
+              parent.right = null;//ลบ node นั้นจากลบ node ขวา parent
+          }
+      }else if(node.left == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านซ้าย
+          Node child = node.right;//node ลูกด้านซ้าย
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else if(node.right == null){//กรณี node ที่ต้องการลบไม่มีลูกด้านขวา
+          Node child = node.left;//node ลูกด้านขวา
+          if(node.key < parent.key){//ถ้าค่า node นั้นน้อยกว่า parent
+              parent.left = child;//ให้ node ซ้าย parent เป็น node ลูกด้านขวา
+          }else{
+              parent.right = child;//ให้ node ขวา parent เป็น node ลูกด้านขวา
+          }
+          child.parent = parent;//กำหนด parent ใหม่ให้ node ลูก
+      }else{
+          Node minRST = findMin(node.right);//หา min ของ subtree ด้านขวา
+          node.key = minRST.key;//เปลี่ยนค่า node ที่ต้องการลบเป็นค่าของ min right subtree
+          deleteKey(minRST);//ใช้ static funtion ลบ node minRST
+      }
+    }
+    
+    public static boolean isMergeable(Node r1, Node r2){
+        if(r1 == null || r2 == null){
+            return true;//ถ้า merge กับ null node ได้
+        }
+        return findMax(r1).key < findMin(r2).key;//ถ้า max r1 น้อยกว่า min r2 แสดงว่าทุก node ใน r1 น้อยกว่า r2
+    }
+
+    public static Node mergeWithRoot(Node r1, Node r2, Node t){
+        if (isMergeable(r1, r2)) {//ถ้า merge กันได้
+            t.left = r1;//ให้ลูกด้านซ้ายเป็น root node ของ r1
+            t.right = r2;//ให้ลูกด้านขวาเป็น root node ของ r2
+            if(r1 != null){//มี r1
+                r1.parent = t;//ผูก parent
+            }
+            if(r2 != null){//มี r2
+                r2.parent = t;//ผูก parent
+            }
+            return t;//return root node ใหม่
+        } else {
+            System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+            return null;
+        }
+    }
+    
+    public void merge(BSTree tree2){
+        if (isMergeable(this.root, tree2.root)){//ถ้า merge กันได้
+            Node t = findMax(this.root);//ให้ t เป็น max node ของ r1
+            deleteKey(t.key);//ลบ max r1 ทิ้ง
+            this.root = mergeWithRoot(this.root, tree2.root, t);//แล้วสร้าง root ใหม่ที่มี root = t แล้วด้านซ้ายเป็น root เก่าของ r1 ขวาเป็น root ของ r2
+        }else{
+            System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+        }
+    }
+
+    // This function is complete, no need to edit
+    public void printTree() {
+        if (root == null) {
+            System.out.println("Empty tree!!!");
+        } else {
+            super.printTree(root);
+        }
+    }
+}
