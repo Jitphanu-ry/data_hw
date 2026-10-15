@@ -1,0 +1,95 @@
+//ให้นักศึกษานำ code ส่วน Node วางไว้ที่นี่
+public class Heap {
+    boolean isMinHeap; // true if minHeap, false if maxHeap
+    int heapSize; // similar to Array's cap variable
+    Node[] arr;//Array as a complete binary tree
+    int back; // similar to Array's size variable
+    
+    // For each push, the timeCounter will increase by 1
+    int timeCounter;
+    
+    public Heap(boolean isMinHeap, int size){
+        arr = new Node[size+1];
+        heapSize = size;
+        back = 1;
+        this.isMinHeap = isMinHeap;
+        timeCounter = 0;
+    }
+    public Node top(){
+        return arr[1]; //return node แรกสุด
+    }
+    
+    public void push(Node node){
+        // Increase timestamp each time you push something
+        timeCounter++;
+        node.timestamp = timeCounter; // Stamp the time number to the node
+        
+        // Do something
+        // Push new node at the end of the array then sift (percolate) up
+        arr[back] = node;//push node ที่ตัวสุดท้าย
+        int index = back;//สร้าง index เก็บตำแหน่ง node
+        // Right shift the back pointer
+        back++; // Uncommment this line and put it to the appropriate location
+        while(index > 1){//ถ้าตำแหน่ง node ยังมากกว่า 1 อยู่
+            int parent = index/2;//สร้าง parent เก็นค่าตำแหน่งของ parent node
+            if(arr[index].compare(arr[parent])){//ถ้า node ที่ push เข้ามามี priority สูงกว่า
+                swap(index,parent);//สลับ index ที่ดูอยู่กับ parent
+                index = parent;//ไต่ parent ขึ้นไป
+            }else{//เจอ priority ต่ำกว่า
+                break;//ออกจาก loop
+            }
+        }
+    }
+    public Node pop(){
+        // DO SOMETHING
+        // 1. mark the root for return
+        // 2. Replace the last node with the root
+        // 3. Sift (percolate) down
+        if(back == 1){//empty heap
+            return null;
+        }
+        // Left shift the back pointer
+        Node root = arr[1];//node ที่จะ pop ออก
+        back--; // Uncommment this line and put it to the appropriate location
+        arr[1] = arr[back];//ให้ root เป็นตัวาุดท้าย
+        arr[back] = null;//ลบตัวท้ายออก
+        
+        int index = 1;//สร้าง index เก็บตำแหน่ง node จะย้ายลง
+        while(index*2 < back){//เลื่อน index ลงเรื่อยๆจนกว่าเกิน back
+            int left = index*2;//ลูกตัวซ้าย
+            int right = left + 1;//ลูกตัวขวา
+            int bestchild = left;//index ที่ node จะเลื่อนไป
+            
+            if(right < back && arr[right].compare(arr[bestchild])){//ถ้าลูกขวายังมี index ไม่เกินตัวท้าย และมี priority สูงกว่า bestchild หรือตัวซ้าย
+                bestchild = right;//ปรับค่า bestchild ให้เป็นตัวขวา
+            }
+            
+            if(arr[index].compare(arr[bestchild])){//ถ้า index มี priority สูงกว่า bestchild แล้วแสดงว่าไม่จำเป็นต้องปรับ heap แล้ว
+                break;//ออกจาก loop
+            }
+            
+            swap(index,bestchild);//สลับ index ที่ดูอยู่กับ bestchild
+            index = bestchild;//่ไล่ bestchild ลงไป
+        }
+        return root; //
+    }
+
+    // Optional: If you do not know what this function does, you do not have to use it
+    public void swap(int index1, int index2){
+        Node temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+    }
+
+    // Optional: If you do not know what this function does, you do not have to use it
+    public void printArray(){
+        System.out.print("[");
+        for (int i=1; i<back; i++){
+            System.out.print(arr[i].price);
+            if (i<back-1)
+                System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+
+}
