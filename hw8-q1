@@ -1,0 +1,48 @@
+public class Node {
+    double price;
+    int investorID;
+    int amount;
+    long timestamp; // Heap.push() is the only function that modify this variable
+    boolean isMinHeap;
+    public Node(double price, int investorID, int amount, boolean isMinHeap){
+        this.price = price;
+        this.investorID = investorID;
+        this.amount = amount;
+        this.isMinHeap = isMinHeap;
+    }
+    
+    public Node(){
+        // Dummy constructor; use Java default values for initialization
+        // No need to edit anything here
+    }
+
+    // return true if Priority(thisNode) > Priority(rightNode)
+    // minHeap: the lower the price, the higher the priority
+    // maxHeap: the lower the price, the lower the priority
+    // Same price; the smaller the timestamp, the higher the priority
+    //
+    // You may create your own function if you do not understand my code
+    public boolean compare(Node rightNode){
+        if (this.price == rightNode.price) {//ถ้า node มีราคาเท่ากัน
+            if(this.timestamp < rightNode.timestamp){//node ที่มาเร็วกว่ามี priority สูงกว่า
+                return true;//node ซ้ายมี priority สูงกว่า
+            }else{
+                return false;//node ขวามี priority สูงกว่า
+            }
+        }else{
+            if (isMinHeap){//เป็น minheap
+                if(this.price < rightNode.price){//node ที่ราคาต่ำกว่ามี priority สูงกว่า
+                    return true;//node ซ้ายมี priority สูงกว่า
+                }else{
+                    return false;//node ขวามี priority สูงกว่า
+                }
+            }else{
+                if(this.price > rightNode.price){//node ที่ราคาสูงกว่ามี priority สูงกว่า
+                    return true;///node ซ้ายมี priority สูงกว่า
+                }else{
+                    return false;//node ขวามี priority สูงกว่า
+                }
+            }
+        }
+    }
+}
