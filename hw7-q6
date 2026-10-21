@@ -319,7 +319,7 @@ public class AVLTree extends BTreePrinter{
                 Node r0 = mergeWithRoot(r1.right,r2,t);//ลงไป r1.right ไป merge ก่อนจนกว่าจะ merge ได้ tree ที่ balance แล้วเก็บผลลัพธ์ไว้ที่ r0
                 r1.right = r0;//นำ r0 มาแทนด้านขวาของ r1
                 if(r0 != null){//มี r0
-                    r0.parent = r2;//ผูก parent
+                    r0.parent = r1;//ผูก parent
                 }
                 AVLTree tree = new AVLTree(r1);//สร้าง AVLTree ใหม่
                 rebalance(tree,r1);//rebalnce r1
