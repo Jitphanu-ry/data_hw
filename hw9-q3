@@ -1,0 +1,188 @@
+import java.util.LinkedList;
+
+@SuppressWarnings("unchecked") 
+public class Graph {
+    
+    Vertex[] vertexList; // This list contain vertices
+    LinkedList<Integer>[] adjacencyList; // Graph implemented by Adjacency List
+    
+    int cap;
+    int size;
+    int cc;
+
+    public Graph(int cap){
+        // Pls initialize all varibles here
+        this.cap = cap;//กำหนดค่า cap
+        this.size = 0;//กำหนดค่า size
+        this.cc = 0;//กำหนดค่า cc
+        this.vertexList = new Vertex[cap];//สร้าง vertexlist
+        this.adjacencyList = new LinkedList[cap];//สร้าง adjacentlist
+    }
+    
+    public void addVertex(int key){
+        if (size==cap){
+            System.out.println("Vertex list is full. You need to recreate the Graph");
+            return;
+        }
+        
+        // Create Vertex object and the LinkedList object
+        // Add these objects to the corresponding arrays
+        // finally, size++;
+        vertexList[size] = new Vertex(key);//สร้าง vertex ใหม่ ใส่ลงใน array
+        adjacencyList[size] = new LinkedList();//สร้าง linkedlist ของ vertex นั้น
+        size++;//เพิ่ม size
+    }
+    
+    // Two way edge
+    // If you make a path from u to v, you must make a path from v to u
+    public void addEdge(int u, int v){
+        if (vertexList[u]==null){
+            System.out.println("Source node does not exist");
+            return;
+        } if (vertexList[v]==null){
+            System.out.println("Destination node does not exist");
+            return;
+        }
+        
+        // Check if there is already an edge from u to v
+        if (!isConnected(u, v)){
+            // Add edge from Vertex(u) to Vertex(v)
+            adjacencyList[u].add(v);//เพิ่ม edge Vertex(u) ไป Vertex(v)
+            // and then from Vertex(v) to Vertex(u)
+            adjacencyList[v].add(u);//เพิ่ม edge Vertex(v) ไป Vertex(u)
+        }else{
+            System.out.println("There is already an edge connecting vertex "+u+" and vertex "+v);
+        }
+    }
+    
+    // Check if Vertex(u) and Vertex(v) has an edge to one another
+    public boolean isConnected(int u, int v){
+        LinkedList<Integer> l = adjacencyList[u];//ให้ linkedlist l เก็บค่า adjacencylist ที่ u
+        for(int i=0;i<l.size();i++){
+            if(l.get(i) == v){//check ใน linkedlist l มีค่าที่เท่ากับ v หรือไม่
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // This function is complete, no need to edit
+    // Please study how this function works
+    // if you understand this function, you will undertand the whole homework
+    public void showAdjacentVertices(int u){
+        Vertex v = vertexList[u];
+        System.out.print("Vertex " + v.strKey + " connected to the following vertices: ");
+        
+        LinkedList<Integer> list = adjacencyList[u];
+        for (int vertex_index : list) {
+            System.out.print(vertexList[vertex_index].strKey + ", ");
+        }
+        System.out.println();
+    }  
+    
+    public void Explore(Vertex v){
+        
+        // Mark this vertex for visited
+        v.visited = true;//set vertex นี้ visit แล้ว
+        // Stamp the current cc number to this vertex (ccNum)
+        v.ccNum = cc;//ให้อยู่ใน connet compent ที่ดูอยู่
+        
+        // Print vertex
+        System.out.print(v.strKey +"/"+v.ccNum+" -> ");
+        
+        
+        // Extract the list of all vertices that are connected to Vertex v
+        int index = -1;//กำหนด index เป็น 1
+        for(int i = 0; i < size; i++){
+            if(vertexList[i] == v){//หา vertex v อยู่ตรงไหนใน vertexlist
+                index = i;//กำหนดค่า index ของ vertex v
+                break;
+            }
+        }
+        // Traverse all the list check if anyone are already visited or not
+        // If no, then explore the vertex
+        if(index != -1){//ถ้ามี index
+            LinkedList<Integer> list = adjacencyList[index];//เอา list ของ vertex v ออกมา
+            for(int neighborIndex : list){//ทุก vertex ใน list (ติดกับ v)
+                Vertex neighbor = vertexList[neighborIndex];//ดูที่ละ vertex
+                if(!neighbor.visited){
+                    Explore(neighbor);//ถ้ายังไม่ explore ก็ explore vertex นั้น
+                }
+            }
+        }
+    }
+    
+    public void DFS(){
+        
+        // Set cc (connected component number) to 1
+        cc = 1;//กำหนด cc เป็น 1
+        // Check all vertices if they are visited or not
+        // If no, then explore the vertex, then increase cc by 1
+        for(int i=0;i<size;i++){
+            if(vertexList[i] != null){//ถ้ามี vertex นั้นอยู่ใน vertexlist
+                vertexList[i].visited = false;//mark ทุก vertex ให้ยังไม่ visited
+            }
+        }
+        for(int i=0;i<size;i++){
+            if(!vertexList[i].visited){//ถ้ายังไม่ได้ visit ไป explore vertex นั้น
+                Explore(vertexList[i]);//explore vertex ทุกตัวใน vertexlist
+                cc++;//explore เสร็จเพิ่ม cc เพื่อแบ่งกลุ่มที่เชื่อมกัน
+            }//ถ้ามีกลุ่มแล้วแสดงว่า visited
+        }
+        
+        System.out.println();
+    }
+    
+    
+    // This is editable test case, but no need to edit
+    public static Graph constructGraph1(){
+        Graph graph = new Graph(32); 
+        for (int i=0; i<16; i++)
+            graph.addVertex(i);
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 5);
+        graph.addEdge(0, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 5);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 6);
+        graph.addEdge(4, 8);
+        graph.addEdge(5, 9);
+        graph.addEdge(6, 7);
+        graph.addEdge(6, 10);
+        graph.addEdge(6, 9);
+        graph.addEdge(7, 14);
+        graph.addEdge(8, 9);
+        graph.addEdge(8, 13);
+        graph.addEdge(8, 12);
+        graph.addEdge(10, 14);
+        graph.addEdge(11, 15);
+        graph.addEdge(13, 14);
+        graph.addEdge(14, 15);
+        
+        return graph;
+    }
+    
+    // This is editable test case, but no need to edit
+    public static Graph constructGraph2(){
+        Graph graph = new Graph(32); 
+        for (int i=0; i<16; i++)
+            graph.addVertex(i);
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 5);
+        graph.addEdge(0, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 5);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 6);
+        graph.addEdge(5, 9);
+        graph.addEdge(6, 9);
+        graph.addEdge(7, 14);
+        graph.addEdge(8, 13);
+        graph.addEdge(8, 12);
+        graph.addEdge(10, 14);
+        graph.addEdge(11, 15);
+        graph.addEdge(14, 15);
+        return graph;
+    }
+}
